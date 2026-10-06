@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your plan – FitBuddy</title><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="/static/style.css"></head><body>
+<main class="wrap">
+  <nav><a class="btn ghost" href="/">New plan</a><a class="btn ghost" href="/view-all-users">View all users</a></nav>
+  <h1>{{ user.username }}'s plan</h1>
+  <p class="meta">
+    <span>User ID <b>{{ user.user_id }}</b></span><span>Age <b>{{ user.age }}</b></span>
+    <span>Weight <b>{{ user.weight }} kg</b></span><span>Goal <b>{{ user.goal }}</b></span>
+    <span>Intensity <b>{{ user.intensity|capitalize }}</b></span>
+  </p>
+  {% if message %}<div class="alert ok" role="status">{{ message }}</div>{% endif %}
+  {% if error %}<div class="alert error" role="alert">{{ error }}</div>{% endif %}
+
+  <section class="panel">
+    <h2>{% if was_updated %}Updated workout plan{% else %}7-day workout plan{% endif %}</h2>
+    <pre>{{ workout_plan }}</pre>
+    {% if was_updated %}
+    <details style="margin-top:14px"><summary>Show original plan</summary><pre style="margin-top:10px">{{ original_plan }}</pre></details>
+    {% endif %}
+  </section>
+
+  <section class="panel tip">
+    <h2>Nutrition tip</h2>
+    <p style="margin:0">{{ nutrition_tip }}</p>
+  </section>
+
+  <form class="panel" action="/submit-feedback" method="post">
+    <h2>Change your plan</h2>
+    <div class="field"><label for="fb_id">User ID</label><input id="fb_id" name="user_id" value="{{ user_id }}" required></div>
+    <div class="field"><label for="feedback">What should change?</label>
+      <textarea id="feedback" name="feedback" rows="3" required placeholder="e.g. More cardio, add two rest days"></textarea></div>
+    <button type="submit">Update plan</button>
+  </form>
+</main></body></html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>All users – FitBuddy</title><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="/static/style.css"></head><body>
+<main class="wrap wide">
+  <nav><a class="btn ghost" href="/">New plan</a></nav>
+  <h1>All users</h1>
+  <p class="sub">{{ users|length }} registered. Compare each original plan with its updated version.</p>
+  {% if not users %}
+  <div class="panel">No users yet. <a href="/" style="color:var(--accent)">Generate the first plan.</a></div>
+  {% else %}
+  <div class="panel tablewrap">
+    <table>
+      <thead><tr><th>User</th><th>Age</th><th>Weight</th><th>Goal</th><th>Intensity</th><th>Plans</th><th></th></tr></thead>
+      <tbody>
+      {% for user in users %}
+        {% set p = plans.get(user.user_id) %}
+        <tr>
+          <td><b>{{ user.username }}</b><br><span style="color:var(--muted)">{{ user.user_id }}</span></td>
+          <td>{{ user.age }}</td><td>{{ user.weight }} kg</td><td>{{ user.goal }}</td><td>{{ user.intensity|capitalize }}</td>
+          <td style="min-width:260px">
+            {% if p %}
+            <details><summary>Original plan</summary><pre style="margin-top:8px">{{ p.original }}</pre></details>
+            {% if p.updated %}<details style="margin-top:8px"><summary>Updated plan</summary><pre style="margin-top:8px">{{ p.updated }}</pre></details>
+            {% else %}<span style="color:var(--muted)">Not updated</span>{% endif %}
+            {% else %}<span style="color:var(--muted)">No plan</span>{% endif %}
+          </td>
+          <td><form action="/delete-user" method="post" onsubmit="return confirm('Delete this user and their plans?')">
+            <input type="hidden" name="user_id" value="{{ user.user_id }}"><button class="danger" type="submit">Delete</button></form></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</main></body></html>
